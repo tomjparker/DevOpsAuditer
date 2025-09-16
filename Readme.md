@@ -21,6 +21,8 @@ Schema examples:
 
 2. gRPC API (Backend Core)
 
+dotnet new grpc -n Ledger.Api
+
 Purpose: The heart of the system — all ingestion and core business logic lives here.
 
 Tech: ASP.NET Core gRPC
