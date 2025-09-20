@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Coding (projects)\\C#\\DevOpsAuditer\\Ledger.Api\\Ledger.Api.csproj": {}
+    "D:\\Coding (projects)\\C#\\DevOpsAuditer\\src\\Ledger.Api\\Ledger.Api.csproj": {}
   },
   "projects": {
-    "D:\\Coding (projects)\\C#\\DevOpsAuditer\\Ledger.Api\\Ledger.Api.csproj": {
+    "D:\\Coding (projects)\\C#\\DevOpsAuditer\\src\\Ledger.Api\\Ledger.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Coding (projects)\\C#\\DevOpsAuditer\\Ledger.Api\\Ledger.Api.csproj",
+        "projectUniqueName": "D:\\Coding (projects)\\C#\\DevOpsAuditer\\src\\Ledger.Api\\Ledger.Api.csproj",
         "projectName": "Ledger.Api",
-        "projectPath": "D:\\Coding (projects)\\C#\\DevOpsAuditer\\Ledger.Api\\Ledger.Api.csproj",
+        "projectPath": "D:\\Coding (projects)\\C#\\DevOpsAuditer\\src\\Ledger.Api\\Ledger.Api.csproj",
         "packagesPath": "C:\\Users\\Tom\\.nuget\\packages\\",
-        "outputPath": "D:\\Coding (projects)\\C#\\DevOpsAuditer\\Ledger.Api\\obj\\",
+        "outputPath": "D:\\Coding (projects)\\C#\\DevOpsAuditer\\src\\Ledger.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -52,7 +52,11 @@
           "dependencies": {
             "Grpc.AspNetCore": {
               "target": "Package",
-              "version": "[2.64.0, )"
+              "version": "[2.*, )"
+            },
+            "Grpc.Tools": {
+              "target": "Package",
+              "version": "[2.*, )"
             }
           },
           "imports": [
