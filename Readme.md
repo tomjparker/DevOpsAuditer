@@ -1,5 +1,7 @@
 NB: All in all this would be the ideal structure to build (but the priority is testing gRPC in .NET first)
 
+See: https://learn.microsoft.com/en-us/aspnet/core/grpc/basics?view=aspnetcore-9.0 
+
 1. SQL Database (Source of Truth)
 
 Purpose: Holds the core, authoritative data about deployments, changes, incidents, and services.
@@ -18,6 +20,8 @@ Schema examples:
 - Changes – individual items within a release (e.g., migration, feature toggle)
 - Incidents – logged production issues and their correlations to releases
 - This is the system of record — relational DB ensures consistency and strong querying.
+
+// Using docker here! `docker compose up -d`
 
 2. gRPC API (Backend Core)
 
@@ -60,3 +64,21 @@ Purpose: Collect deployment and pipeline events from external systems and send t
 
 NB: ingestion contract stays the same, no matter which provider is upstream.
 This makes the backend cloud-agnostic and future-proof.
+
+
+
+| Project Name                          | Type                       | Purpose                                                                      |
+| ------------------------------------- | -------------------------- | ---------------------------------------------------------------------------- |
+| **Ledger.Api**                        | ASP.NET Core gRPC Web Host | Exposes gRPC services + REST endpoints for the frontend or external systems. |
+| **Ledger.Infrastructure**             | Class Library              | Data access layer: EF Core DbContext, migrations, repository code.           |
+| **Ledger.Core** *(optional at first)* | Class Library              | Domain models, core business rules, interfaces shared across layers.         |
+| **Ledger.UnitTests**                  | Test Project               | Unit and integration tests.                                                  |
+
+
+Dotnet build pipeline phases:
+// NB: This requires your base protos, services and program to be written to compile the rpc parts of gRPC
+1. Restore:	Downloads all NuGet packages (Grpc.Tools, EF Core, etc.).
+2. Generate gRPC cod:	Uses Grpc.Tools to read ledger.proto and generate C# classes like LedgerServiceBase, LedgerServiceClient, and your message classes (ReleaseItem, IncidentItem).
+3. Compile:	Compiles your C# files (Program.cs, LedgerGrpcService.cs, EF Core models, etc.) together with the generated gRPC code.
+4. Link and output:	Produces a .dll and executable in bin/Debug/net9.0/.
+5. Check for errors: If there are syntax errors or missing references, it fails here.
