@@ -35,3 +35,14 @@ D:\Coding (projects)\C#\DevOpsAuditer\Ledger.Api\obj\Debug\net9.0\refint\Ledger.
 D:\Coding (projects)\C#\DevOpsAuditer\Ledger.Api\obj\Debug\net9.0\Ledger.Api.pdb
 D:\Coding (projects)\C#\DevOpsAuditer\Ledger.Api\obj\Debug\net9.0\Ledger.Api.genruntimeconfig.cache
 D:\Coding (projects)\C#\DevOpsAuditer\Ledger.Api\obj\Debug\net9.0\ref\Ledger.Api.dll
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.csproj.AssemblyReference.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\rpswa.dswa.cache.json
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.GeneratedMSBuildEditorConfig.editorconfig
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.AssemblyInfoInputs.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.AssemblyInfo.cs
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.csproj.CoreCompileInputs.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.MvcApplicationPartsAssemblyInfo.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.sourcelink.json
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.dll
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\refint\Ledger.Api.dll
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Api\obj\Debug\net9.0\Ledger.Api.pdb

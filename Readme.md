@@ -82,3 +82,18 @@ Dotnet build pipeline phases:
 3. Compile:	Compiles your C# files (Program.cs, LedgerGrpcService.cs, EF Core models, etc.) together with the generated gRPC code.
 4. Link and output:	Produces a .dll and executable in bin/Debug/net9.0/.
 5. Check for errors: If there are syntax errors or missing references, it fails here.
+
+
+`dotnet new classlib -n Ledger.Infrastructure`
+
+// Sets up sub projects to be called into main project
+
+# If Ledger.sln exists but is empty/corrupt, recreate it:
+del .\Ledger.sln
+dotnet new sln -n Ledger
+
+# Add your projects to the solution
+dotnet sln Ledger.sln add .\src\Ledger.Api\Ledger.Api.csproj
+dotnet sln Ledger.sln add .\src\Ledger.Infrastructure\Ledger.Infrastructure.csproj
+
+dotnet add .\src\Ledger.Api\Ledger.Api.csproj reference .\src\Ledger.Infrastructure\Ledger.Infrastructure.csproj

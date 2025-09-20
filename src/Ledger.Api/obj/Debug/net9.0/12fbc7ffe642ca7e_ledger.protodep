@@ -1,0 +1,2 @@
+obj\Debug\net9.0/Ledger.cs \
+obj\Debug\net9.0/LedgerGrpc.cs: Protos/ledger.proto

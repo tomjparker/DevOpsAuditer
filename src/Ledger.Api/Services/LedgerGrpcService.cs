@@ -67,7 +67,7 @@ public class LedgerGrpcService: LedgerServiceBase
         return reply;
     }
 
-    public override async Task<ListReleasesResponse> ListReleases(ListReleasesRequest request ServerCallContext context)
+    public override async Task<ListReleasesResponse> ListReleases(ListReleasesRequest request, ServerCallContext context)
     {
         var q = _db.Releases
             .Include(r => r.Service)
@@ -107,12 +107,12 @@ public class LedgerGrpcService: LedgerServiceBase
     }
 
     // --- Incidents --- //
-    public override async Task<IncidentItem> CreateIncident(CreateIncidentRequest request, ServerCallContext)
+    public override async Task<IncidentItem> CreateIncident(CreateIncidentRequest request, ServerCallContext context)
     {
-        var i = request.Incident ?? throw new RpcException(new Status(StatusCode.InvalidArgument, "incident is required"))
-
-        var svc = await _db.Services.FirstOrDefaultAsync(s => s.Name == i.service, context.CancellationToken)
-            ?? _db.Services.Add(new Service { Name i.Service }).Entity;
+        var i = request.Incident ?? throw new RpcException(new Status(StatusCode.InvalidArgument, "incident is required"));
+        
+        var svc = await _db.Services.FirstOrDefaultAsync(s => s.Name == i.Service, context.CancellationToken)
+                  ?? _db.Services.Add(new Service { Name = i.Service }).Entity;
 
         var env = await _db.Environments.FirstOrDefaultAsync(e => e.Name == i.Environment, context.CancellationToken)
             ?? _db.Environments.Add(new EnvironmentEntity { Name = i.Environment }).Entity;
@@ -138,7 +138,7 @@ public class LedgerGrpcService: LedgerServiceBase
             Summary = inc.Title,
             Severity = i.Severity,
             StartedAtUtc = inc.StartedAt.ToString("O", CultureInfo.InvariantCulture),
-            ResolvedAtUtc = inc.ResolveAt?.ToString("O", CultureInfo.InvariantCulture) ?? ""
+            ResolvedAtUtc = inc.ResolveAt?.ToString("O", CultureInfo.InvariantCulture) ?? "",
             ExternalId = inc.Key
         };
         reply.Metadata.Add(i.Metadata);

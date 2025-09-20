@@ -1,0 +1,15 @@
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.csproj.AssemblyReference.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.AssemblyInfoInputs.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.AssemblyInfo.cs
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.csproj.CoreCompileInputs.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.sourcelink.json
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\bin\Debug\net9.0\Ledger.Infrastructure.deps.json
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\bin\Debug\net9.0\Ledger.Infrastructure.runtimeconfig.json
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\bin\Debug\net9.0\Ledger.Infrastructure.dll
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\bin\Debug\net9.0\Ledger.Infrastructure.pdb
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.dll
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\refint\Ledger.Infrastructure.dll
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.pdb
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\Ledger.Infrastructure.genruntimeconfig.cache
+D:\Coding (projects)\C#\DevOpsAuditer\src\Ledger.Infrastructure\obj\Debug\net9.0\ref\Ledger.Infrastructure.dll
