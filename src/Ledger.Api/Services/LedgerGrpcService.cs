@@ -105,7 +105,53 @@ public class LedgerGrpcService: LedgerServiceBase
 
         return resp;
     }
-    
+
     // --- Incidents --- //
-    public override async Task<IncidentItem> CreateIncident
+    public override async Task<IncidentItem> CreateIncident(CreateIncidentRequest request, ServerCallContext)
+    {
+        var i = request.Incident ?? throw new RpcException(new Status(StatusCode.InvalidArgument, "incident is required"))
+
+        var svc = await _db.Services.FirstOrDefaultAsync(s => s.Name == i.service, context.CancellationToken)
+            ?? _db.Services.Add(new Service { Name i.Service }).Entity;
+
+        var env = await _db.Environments.FirstOrDefaultAsync(e => e.Name == i.Environment, context.CancellationToken)
+            ?? _db.Environments.Add(new EnvironmentEntity { Name = i.Environment }).Entity;
+
+        var started = TryParseIso(i.StartedAtUtc) ?? DataTimeOffset.UtcNow;
+        var resolved = string.IsNullOrWhitespace(i.ResolvedAtUtc) ? (DateTimeOffset?)null : TryParseIso(i.ResolvedAtUtc);
+
+        var inc = new Incident
+        {
+            Title = i.Summary,
+            Key = i.ExternalId ?? "",
+            Started = started,
+            ResolvedAt = resolved
+        };
+
+        _db.Incidents.Add(inc);
+        await _db.SaveChangesAsync(context.CancellationToken);
+
+        var reply = new IncidentItem
+        {
+            Service = svc.Name,
+            Environment = env.Name,
+            Summary = inc.Title,
+            Severity = i.Severity,
+            StartedAtUtc = inc.StartedAt.ToString("O", CultureInfo.InvariantCulture),
+            ResolvedAtUtc = inc.ResolveAt?.ToString("O", CultureInfo.InvariantCulture) ?? ""
+            ExternalId = inc.Key
+        };
+        reply.Metadata.Add(i.Metadata);
+        return reply;
+    }
+    
+    public override async Task<ListIncidentsResponse> ListIncidents(ListIncidentsRequest request, ServerCallContext context)
+    {
+        var q = _db.Incidents.AsNoTracking().AsQueryable();
+
+        // Joins/Filters later here for incident to service table link
+
+        var total = await q.CountAsync(context.CancellationToken);
+        var page = request.Page
+    }
 }
