@@ -144,7 +144,7 @@ public class LedgerGrpcService: LedgerServiceBase
         reply.Metadata.Add(i.Metadata);
         return reply;
     }
-    
+
     public override async Task<ListIncidentsResponse> ListIncidents(ListIncidentsRequest request, ServerCallContext context)
     {
         var q = _db.Incidents.AsNoTracking().AsQueryable();
@@ -152,6 +152,34 @@ public class LedgerGrpcService: LedgerServiceBase
         // Joins/Filters later here for incident to service table link
 
         var total = await q.CountAsync(context.CancellationToken);
-        var page = request.Page
+        var page = request.PageSize <= 0 ? 1 : requestPage;
+        var size = request.PageSize <= 0 ? 20 : Math.Min(request.PageSize, 100);
+
+        var items = await q.OrderByDescending(i => i.StartedAt)
+            .Skip((page - 1) * size)
+            .Take(size)
+            .ToListAsync(context.CancellationToken);
+
+        var resp = new ListIncidentResponse { Total = total };
+        resp.Incidents.AddRange(items.Select(i => new IncidentItem
+        {
+            Service = "", // opt
+            Environment = "", // opt
+            Summary = i.Title,
+            Severity = "", // Add severuty column for persisting
+            StartedAtUtc = i.StartedAt.ToString("O", CultureInfo.InvariantCulture),
+            ResolvedAtUtc = i.ResolvedAt?.ToString("O", CultureInfo.InvariantCulture) ?? "",
+            ExternalId = i.Key
+        }));
+        return resp;
+    }
+    
+    // --- Helpers --- //
+    private static DateTimeOffset? TryParseIso(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return null;
+        if (DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dto))
+            return dto;
+        return null;
     }
 }
