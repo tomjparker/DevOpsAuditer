@@ -78,3 +78,9 @@ Migrations/*.g.cs
 # Local config
 appsettings.Development.json
 appsettings.Local.json
+
+bin/
+obj/
+out/
+Debug/
+Release/
