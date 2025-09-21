@@ -1,0 +1,80 @@
+# Build output
+bin/
+obj/
+out/
+dist/
+Debug/
+Release/
+
+# VS & VSCode user-specific files
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Logs
+*.log
+
+# Rider/JetBrains IDEs
+.idea/
+*.sln.iml
+
+# Test result files
+TestResult.xml
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+*.snupkg
+# Exclude the NuGet packages folder if you ever restore locally
+packages/
+
+# EF Core Migrations build artifacts
+Migrations/*.Designer.cs
+Migrations/*.g.cs
+
+# Database files (local dev)
+*.db
+*.mdf
+*.ldf
+
+# Local config secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# OS junk files
+Thumbs.db
+.DS_Store
+
+# Node.js frontend (For dashboard later)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Docker
+**/docker-compose.override.yml
+
+# gRPC generated code
+# These are generated at build time from your .proto files
+obj/
+bin/
+
+# Keep proto contracts
+!src/**/Protos/*.proto
+
+# EF Core migrations
+Migrations/*.Designer.cs
+Migrations/*.g.cs
+
+# IDE junk
+.vscode/
+.idea/
+
+# Local config
+appsettings.Development.json
+appsettings.Local.json

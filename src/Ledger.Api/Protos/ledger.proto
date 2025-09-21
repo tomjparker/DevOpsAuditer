@@ -1,0 +1,86 @@
+// ReleaseItem and IncidentItem are standalone messages - This makes them reusable across both ingestion and query responses. Metadata map keeps the model flexible without constant proto updates.
+
+// Create vs. List split cleanly - CreateReleaseRequest and CreateIncidentRequest wrap their respective entity. This gives you room later to add auth, request IDs, or pipeline context without breaking changes.
+
+// Pagination built-in - page and page_size are simple integers so you can implement offset-based pagination. Total count returned for UI progress bars or dashboards.
+
+// ISO8601 timestamps as strings - This avoids time zone parsing headaches in multiple languages. All times are stored in UTC, frontend handles conversion.
+
+syntax = "proto3";
+
+option csharp_namespace = "Ledger.Api";
+
+package ledger;
+
+message ReleaseItem {
+    string service = 1;
+    string environment = 2; // dev | staging | prod
+    string version = 3;
+    string commit_sha = 4; 
+    string deployed_by = 5;
+    string deployed_at_utc = 6; // ISO8601
+    map<string,string> metadata = 7;
+}
+
+message IncidentItem {
+    string service = 1;
+    string environment = 2;
+    string summary = 3;
+    string severity = 4; // P1..P4
+    string started_at_utc = 5; // ISO 8601
+    string resolved_at_utc = 6; // Optional ISO 8601, empty if open
+    string external_id = 7; // External system id i.e. Jira
+    map<string,string> metadata = 8;
+}
+
+// --- Ingestion RPC Requests --- //
+
+message CreateReleaseRequest {
+    ReleaseItem release = 1;
+}
+
+message CreateIncidentRequest {
+    IncidentItem incident = 1;
+}
+
+// --- Query RPC Requests --- //
+
+message ListReleasesRequest {
+    string service = 1; // Opt
+    string environment = 2; // Opt
+    int32 page = 3; // Pagination 1-based
+    int32 page_size = 4; // Default to 20
+}
+
+message ListIncidentsRequest {
+    string service = 1; // opt
+    string environment = 2; // opt
+    int32 page = 3;
+    int32 page_size = 4; 
+}
+
+// --- Query RPC Responses --- //
+
+message ListReleasesResponse {
+    repeated ReleaseItem releases = 1;
+    int32 total = 2; // total matching records
+}
+
+
+message ListIncidentsResponse {
+    repeated IncidentItem incidents = 1;
+    int32 total = 2; // Total matching records
+}
+
+// --- Service Definition --- //
+
+service LedgerService {
+    // Ingest
+    rpc CreateRelease(CreateReleaseRequest) returns (ReleaseItem);
+    rpc CreateIncident(CreateIncidentRequest) returns (IncidentItem);
+
+    // Query
+    rpc ListReleases(ListReleasesRequest) returns (ListReleasesResponse);
+    rpc ListIncidents(ListIncidentsRequest) returns (ListIncidentsResponse);
+}
+

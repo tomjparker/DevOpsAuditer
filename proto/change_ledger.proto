@@ -1,0 +1,44 @@
+syntax = "proto3";
+package ledger.v1;
+
+option csharp_namespace = "Ledger.Proto";
+
+service ChangeLedger {
+  // CI/CD posts a release event (write path)
+  rpc IngestRelease (IngestReleaseRequest) returns (IngestReleaseReply);
+
+  // UI/CLI reads recent releases (read path)
+  rpc GetRecentReleases (GetRecentReleasesRequest) returns (GetRecentReleasesReply);
+}
+
+message IngestReleaseRequest {
+  string source        = 1;  // github|gitlab|azdo|jenkins|custom
+  string service       = 2;  // The payments-api
+  string environment   = 3;  // Simulate dev|staging|prod - prod here
+  string version       = 4;  // v1.12.3 or commit SHA
+  string commit_sha    = 5;
+  string deployed_by   = 6;
+  string deployed_at   = 7;  // RFC3339/ISO-8601 (UTC)
+  repeated ChangeItem changes = 8;
+  map<string,string> links    = 9;  // runUrl, prUrl, etc.
+  map<string,string> metadata = 10; // branch, pipelineId, ...
+}
+
+message ChangeItem { string type = 1; string summary = 2; }
+
+message IngestReleaseReply { bool accepted = 1; string id = 2; }
+
+message GetRecentReleasesRequest { int32 minutes = 1; string service = 2; string environment = 3; }
+message GetRecentReleasesReply { repeated Release releases = 1; }
+
+message Release {
+  string id = 1;
+  string service = 2;
+  string environment = 3;
+  string version = 4;
+  string commit_sha = 5;
+  string deployed_by = 6;
+  string deployed_at = 7;
+  repeated ChangeItem changes = 8;
+  map<string,string> links = 9;
+}
