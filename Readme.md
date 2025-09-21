@@ -97,3 +97,5 @@ dotnet sln Ledger.sln add .\src\Ledger.Api\Ledger.Api.csproj
 dotnet sln Ledger.sln add .\src\Ledger.Infrastructure\Ledger.Infrastructure.csproj
 
 dotnet add .\src\Ledger.Api\Ledger.Api.csproj reference .\src\Ledger.Infrastructure\Ledger.Infrastructure.csproj
+
+dotnet build .\Ledger.sln

@@ -18,10 +18,11 @@ public class LedgerGrpcService: LedgerServiceBase
     // --- Releases --- //
     public override async Task<ReleaseItem> CreateRelease(CreateReleaseRequest request, ServerCallContext context)
     {
-        var r = request.Release ?? throw new RPCException(new Status(StatusCode.InvalidArgument, "release is required"));
+        var r = request.Release ?? throw new RpcException(new Status(StatusCode.InvalidArgument, "release is required"));
 
         // Upsert service
-        var svc = await _db.Services.FirstOrDefaultAsync(s => s.Name == r.Service, context.CancellationToken);
+        var svc = await _db.Services
+            .FirstOrDefaultAsync(s => s.Name == r.Service, context.CancellationToken);
         if (svc is null)
         {
             svc = new Service { Name = r.Service };
@@ -29,15 +30,15 @@ public class LedgerGrpcService: LedgerServiceBase
         }
 
         // Upsert Environment (simple string name, e.g. dev | staging | prod)
-        var env = await _db.Environments.FirstOrDefaultAsync(e => e, Name == r.Environment, context.CancellationToken);
+        var env = await _db.Environments.FirstOrDefaultAsync(e => e.Name == r.Environment, context.CancellationToken);
         if (env is null)
         {
-            env = new EnvrionmentEntity { Name = r.Environment };
+            env = new EnvironmentEntity { Name = r.Environment };
             _db.Environments.Add(env);
         }
 
         // Parse time (ISO8601 expected; fallback to UtcNow)
-        var deployedAt = TryParseIso(r.DeployedAtUtc) ?? datetimeOffSet.UtcNow;
+        var deployedAt = TryParseIso(r.DeployedAtUtc) ?? DateTimeOffset.UtcNow;
 
         var rel = new Release
         {
@@ -45,7 +46,7 @@ public class LedgerGrpcService: LedgerServiceBase
             Environment = env,
             Version = r.Version,
             CommitSha = r.CommitSha,
-            DeployedBy = string.IsNullOrWhitespace(r.DeployedBy) ? null : r.DeployedBy,
+            DeployedBy = string.IsNullOrWhiteSpace(r.DeployedBy) ? null : r.DeployedBy,
             DeployedAt = deployedAt
         };
 
@@ -79,7 +80,7 @@ public class LedgerGrpcService: LedgerServiceBase
             q = q.Where(r => r.Service.Name == request.Service);
 
         if (!string.IsNullOrWhiteSpace(request.Environment))
-            q = q.Where(r => r.Environement.Name == request.Environment);
+            q = q.Where(r => r.Environment.Name == request.Environment);
 
         var total = await q.CountAsync(context.CancellationToken);
 
@@ -94,7 +95,7 @@ public class LedgerGrpcService: LedgerServiceBase
         var resp = new ListReleasesResponse { Total = total };
         resp.Releases.AddRange(items.Select(r => new ReleaseItem
         {
-            Serverive = r.Service.Name,
+            Service = r.Service.Name,
             Environment = r.Environment.Name,
             Version = r.Version,
             CommitSha = r.CommitSha,
@@ -117,14 +118,14 @@ public class LedgerGrpcService: LedgerServiceBase
         var env = await _db.Environments.FirstOrDefaultAsync(e => e.Name == i.Environment, context.CancellationToken)
             ?? _db.Environments.Add(new EnvironmentEntity { Name = i.Environment }).Entity;
 
-        var started = TryParseIso(i.StartedAtUtc) ?? DataTimeOffset.UtcNow;
-        var resolved = string.IsNullOrWhitespace(i.ResolvedAtUtc) ? (DateTimeOffset?)null : TryParseIso(i.ResolvedAtUtc);
+        var started = TryParseIso(i.StartedAtUtc) ?? DateTimeOffset.UtcNow;
+        var resolved = string.IsNullOrWhiteSpace(i.ResolvedAtUtc) ? (DateTimeOffset?)null : TryParseIso(i.ResolvedAtUtc);
 
         var inc = new Incident
         {
             Title = i.Summary,
             Key = i.ExternalId ?? "",
-            Started = started,
+            StartedAt = started,
             ResolvedAt = resolved
         };
 
@@ -138,7 +139,7 @@ public class LedgerGrpcService: LedgerServiceBase
             Summary = inc.Title,
             Severity = i.Severity,
             StartedAtUtc = inc.StartedAt.ToString("O", CultureInfo.InvariantCulture),
-            ResolvedAtUtc = inc.ResolveAt?.ToString("O", CultureInfo.InvariantCulture) ?? "",
+            ResolvedAtUtc = inc.ResolvedAt?.ToString("O", CultureInfo.InvariantCulture) ?? "",
             ExternalId = inc.Key
         };
         reply.Metadata.Add(i.Metadata);
@@ -152,7 +153,7 @@ public class LedgerGrpcService: LedgerServiceBase
         // Joins/Filters later here for incident to service table link
 
         var total = await q.CountAsync(context.CancellationToken);
-        var page = request.PageSize <= 0 ? 1 : requestPage;
+        var page = request.PageSize <= 0 ? 1 : request.Page;
         var size = request.PageSize <= 0 ? 20 : Math.Min(request.PageSize, 100);
 
         var items = await q.OrderByDescending(i => i.StartedAt)
@@ -160,7 +161,7 @@ public class LedgerGrpcService: LedgerServiceBase
             .Take(size)
             .ToListAsync(context.CancellationToken);
 
-        var resp = new ListIncidentResponse { Total = total };
+        var resp = new ListIncidentsResponse { Total = total };
         resp.Incidents.AddRange(items.Select(i => new IncidentItem
         {
             Service = "", // opt
