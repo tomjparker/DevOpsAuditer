@@ -99,3 +99,16 @@ dotnet sln Ledger.sln add .\src\Ledger.Infrastructure\Ledger.Infrastructure.cspr
 dotnet add .\src\Ledger.Api\Ledger.Api.csproj reference .\src\Ledger.Infrastructure\Ledger.Infrastructure.csproj
 
 dotnet build .\Ledger.sln
+
+// Make the database next
+dotnet tool install --global dotnet-ef
+
+dotnet ef migrations add InitialCreate `
+  --project .\src\Ledger.Infrastructure `
+  --startup-project .\src\Ledger.Api
+
+dotnet ef database update `
+  --project .\src\Ledger.Infrastructure `
+  --startup-project .\src\Ledger.Api
+
+dotnet add .\src\Ledger.Infrastructure package Microsoft.EntityFrameworkCore.Design
